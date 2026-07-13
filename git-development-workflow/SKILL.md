@@ -1,11 +1,11 @@
 ---
 name: git-development-workflow
-description: Orchestrated development workflow for any task in a git repository — isolate work on a branch/worktree, delegate plan → implement → review to sub-agents, integrate, get the PR green, merge, and cut a release tag when the repo publishes on tags.
+description: Single-agent development workflow for any task in a git repository — isolate work on a branch/worktree, plan, implement, self-review, get the PR green, merge, and cut a release tag when the repo publishes on tags.
 ---
 
 # Git Development Workflow
 
-For any development task in a git repository. You are the orchestrator: you set up isolation, delegate the work to sub-agents in sequence, then integrate and verify. Don't do the planning, implementation, or review yourself.
+For any development task in a git repository. Complete the entire workflow yourself in one agent context: isolate, plan, implement, review, integrate, and verify. Do not spawn or delegate to sub-agents.
 
 ## 1. Understand the task
 
@@ -20,28 +20,28 @@ Restate the goal in one sentence. Ask only if the request is ambiguous or unsafe
 
 Confirm the repo has PR validation and — if it publishes an artifact — a tag-triggered release workflow. Missing, or the prompt asks to set them up (/ci-cd-pipeline-setup): do that first on its own branch → PR → merge, so the feature PR runs against real checks. Already adequate: change nothing here.
 
-## 4. Plan (sub-agent)
+## 4. Plan
 
-Spawn a planning sub-agent (`Plan` type). Give it the task statement and repo location. It returns: the smallest implementation path, files to touch, tests to add/update, and risks. Review the plan; trim anything speculative before handing it on.
+Inspect the repository and write the smallest implementation path: files to touch, tests to add or update, and risks. Trim anything speculative before implementation.
 
-## 5. Implement (sub-agent)
+## 5. Implement
 
-Spawn an implementation sub-agent with the approved plan verbatim plus these constraints:
+Implement the approved plan directly with these constraints:
 
 - Smallest change that satisfies the request. Follow existing patterns; no unrelated refactors, formatting churn, or public-API changes.
 - Add/update tests for behavior changes; update docs when commands, config, or public usage change.
 - Never run destructive git commands (`reset --hard`, `clean -fd`, force-push, history rewrite, branch deletion).
 - Commit on the working branch with clear messages.
 
-## 6. Review (sub-agent)
+## 6. Self-review
 
-Spawn a review sub-agent on the resulting diff. It checks: correctness, scope creep (anything outside the plan gets reverted), test coverage, and convention adherence. It may apply cleanups directly. It reports findings fixed and findings remaining.
+Review the resulting diff for correctness, scope creep, test coverage, and convention adherence. Revert anything outside the plan, apply necessary cleanups directly, and record findings fixed and findings remaining.
 
 ## 7. Integrate and go green
 
 While any PR review bot runs, you:
 
-1. Review the final diff yourself; revert anything unrelated that survived review.
+1. Review the final diff once more; revert anything unrelated that survived self-review.
 2. Run the repo's validation (tests, lint, types, build — infer from package scripts, CI config, Makefile, README). Fix failures the change caused.
 3. Open the PR if one doesn't exist: clear title, what/why, testing performed, risks.
 4. Address CI and review-bot feedback until the PR is green. If a check can't run, say which one and why.
