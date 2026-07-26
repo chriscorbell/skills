@@ -11,28 +11,21 @@ Deliverable is a plan, not an implementation. Implement only if the user asks af
 
 ## 1. Open the collab
 
-Identify the peer and its call. You are Claude → peer is Codex. You are Codex → peer is Claude.
+Identify the peer and its call. If you are Claude, then your peer is Codex, and you should use `codex exec` to call it. If you are Codex, then your peer is Claude, and you should use `claude -p` to call it.
 
-```sh
-# calling Codex
-codex exec -s read-only --skip-git-repo-check -o "$COLLAB/<reply>.md" "<prompt>" >/dev/null 2>&1
-# calling Claude
-claude -p --permission-mode plan "<prompt>" > "$COLLAB/<reply>.md" 2>&1
-```
+The peer starts cold every call, keeps no memory of the last one, and writes no files. So every prompt states the task, names the absolute paths to read, and asks for the whole reply as markdown on stdout. Peer CLI missing or erroring → report it and stop; there is no collab with one agent.
 
-Both are read-only and stateless: the peer starts cold every call, keeps no memory of the last one, and writes no files. So every prompt states the task, names the absolute paths to read, and asks for the whole reply as markdown on stdout. Peer CLI missing or erroring → report it and stop; there is no collab with one agent.
-
-Make the shared directory: `COLLAB=$(mktemp -d -t collab-XXXX)`. All files below live there.
+Make the shared directory: `./agent/collab/`. All files below live there.
 
 ## 2. Brief
 
-Write `$COLLAB/brief.md`: the task in the user's words, the deliverable, hard constraints, the repo path and the files that matter, and the open questions a plan must answer. Resolve genuine ambiguity with the user now — a vague brief produces two plans that disagree about the question rather than the answer.
+Write `./agent/collab/brief.md`: the task, the deliverable, hard constraints, the repo path and the files that matter, and the open questions a plan must answer. Resolve genuine ambiguity with the user now — a vague brief produces two plans that disagree about the question rather than the answer.
 
 **Done when** a cold agent could plan from `brief.md` alone.
 
 ## 3. Blind drafts
 
-Launch the peer's draft first with its output redirected to `$COLLAB/<peer>-plan.md`, then write `$COLLAB/<you>-plan.md` yourself. Yours is written blind — the peer's file stays closed until yours is on disk.
+Launch the peer's draft first with its output redirected to `./agent/collab/<peer>-plan.md`, then write `./agent/collab/<you>-plan.md` yourself. Yours is written blind — the peer's file stays closed until yours is on disk.
 
 Both drafts check the brief's ground truth against the machine rather than inheriting it — say so in the peer's prompt. A fact the brief got wrong otherwise lands in both plans and survives the challenge unexamined, because neither side ever looked.
 
@@ -50,7 +43,7 @@ Send the peer both plan paths and ask for its challenge; write yours blind again
 
 ## 5. Converge
 
-Work the open disagreements. Each one ends when a side concedes with a reason, or both of you land on a third option neither drafted. Fold the settled ones into `$COLLAB/consensus.md`, send it to the peer, and take its next round. Three exchanges is the budget; anything still open after that is a standoff, not a discussion.
+Work the open disagreements. Each one ends when a side concedes with a reason, or both of you land on a third option neither drafted. Fold the settled ones into `./agent/collab/consensus.md`, send it to the peer, and take its next round. Three exchanges is the budget; anything still open after that is a standoff, not a discussion.
 
 Hold your position while your argument survives the peer's. Conceding to close the round is how two agents produce a plan neither believes.
 
@@ -58,4 +51,4 @@ Hold your position while your argument survives the peer's. Conceding to close t
 
 ## Report
 
-Give the user the consensus plan, the disagreements and how each resolved, any standoff needing their call, and `$COLLAB`. The disagreements are the payoff — lead with them, not with the plan's agreeable parts.
+Give the user the consensus plan, the disagreements and how each resolved, any standoff needing their call, and `./agents/collab/`. The disagreements are the payoff — lead with them, not with the plan's agreeable parts.
