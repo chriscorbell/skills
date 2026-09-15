@@ -43,10 +43,57 @@ Done when: the board's settings dialog in Cardboard admin shows both apps as ins
 
 ## 4. Protect the default branch with the `cardboard` ruleset
 
-The ruleset requires a pull request with one approval. Its bypass actors are the merge app and repository admins, so a Session's token cannot merge while the owner keeps pushing directly. Create it with the API from [ruleset.json](ruleset.json), which already carries the merge app's actor id:
+The ruleset requires a pull request with one approval. Its bypass actors are the merge app and repository admins, so a Session's token cannot merge while the owner keeps pushing directly. Create it with one API call, feeding the JSON below on stdin; it already carries the merge app's actor id:
 
 ```bash
-gh api -X POST "/repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/rulesets" --input ~/.agents/skills/cardboard-onboard/ruleset.json
+gh api -X POST "/repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/rulesets" --input - <<'JSON'
+{
+  "name": "cardboard",
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "include": [
+        "~DEFAULT_BRANCH"
+      ],
+      "exclude": []
+    }
+  },
+  "bypass_actors": [
+    {
+      "actor_id": 4943268,
+      "actor_type": "Integration",
+      "bypass_mode": "always"
+    },
+    {
+      "actor_id": 5,
+      "actor_type": "RepositoryRole",
+      "bypass_mode": "always"
+    }
+  ],
+  "rules": [
+    {
+      "type": "deletion"
+    },
+    {
+      "type": "non_fast_forward"
+    },
+    {
+      "type": "pull_request",
+      "parameters": {
+        "required_approving_review_count": 1,
+        "dismiss_stale_reviews_on_push": true,
+        "require_code_owner_review": false,
+        "require_last_push_approval": false,
+        "required_review_thread_resolution": false,
+        "allowed_merge_methods": [
+          "squash"
+        ]
+      }
+    }
+  ]
+}
+JSON
 ```
 
 If the repository already has a ruleset named `cardboard`, leave it. Requires admin on the repository; on a client-owned repository, hand the JSON and the command to the client.
