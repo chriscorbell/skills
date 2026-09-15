@@ -1,11 +1,11 @@
 ---
-name: cardboard-onboard
-description: Prepare a GitHub repository for Cardboard, the agent-native kanban at cardboard.xode.cc, so its Sessions can clone, change, and open pull requests against it. Use when the user wants to connect, onboard, or set up a repo or project for Cardboard, or asks why Sessions on a board cannot push or merge.
+name: kardboard-onboard
+description: Prepare a GitHub repository for kardboard, the agent-native kanban at kardboard.cc, so its Sessions can clone, change, and open pull requests against it. Use when the user wants to connect, onboard, or set up a repo or project for kardboard, or asks why Sessions on a board cannot push or merge.
 ---
 
-# Onboard a repository for Cardboard
+# Onboard a repository for kardboard
 
-A Cardboard **Session** is a disposable container that clones this repository on a branch named `cardboard/<card id>-<slug>`, reads `AGENTS.md`, makes the change a card asks for, runs the repository's acceptance command, pushes, and opens a pull request with `gh`. Cardboard itself merges on Approval through a second GitHub App that bypasses a branch ruleset. Onboarding is done when every item in the final checklist is verified, not merely written.
+A kardboard **Session** is a disposable container that clones this repository on a branch named `cardboard/<card id>-<slug>`, reads `AGENTS.md`, makes the change a card asks for, runs the repository's acceptance command, pushes, and opens a pull request with `gh`. kardboard itself merges on Approval through a second GitHub App that bypasses a branch ruleset. Onboarding is done when every item in the final checklist is verified, not merely written.
 
 Work from the repository root. Find the repository with `gh repo view --json nameWithOwner,defaultBranchRef -q '.nameWithOwner + " " + .defaultBranchRef.name'`.
 
@@ -34,14 +34,16 @@ Done when: a pull request from a `cardboard/*` branch would get the same checks 
 
 Only the repository owner can do this; open the two links for the user and wait:
 
-- https://github.com/apps/cardboard-sessions/installations/new
-- https://github.com/apps/cardboard-merge/installations/new
+- https://github.com/apps/kardboard-sessions/installations/new
+- https://github.com/apps/kardboard-merge/installations/new
 
 Choose "Only select repositories" and pick this repository. On a client-owned repository the client installs them from the same links.
 
-Done when: the board's settings dialog in Cardboard admin shows both apps as installed (step 5 creates the board).
+Done when: the board's settings dialog in kardboard admin shows both apps as installed (step 5 creates the board).
 
 ## 4. Protect the default branch with the `cardboard` ruleset
+
+The ruleset name `cardboard` and the `cardboard/` branch prefix predate the rename to kardboard and stay as they are, so existing boards keep working.
 
 The ruleset requires a pull request with one approval. Its bypass actors are the merge app and repository admins, so a Session's token cannot merge while the owner keeps pushing directly. Create it with one API call, feeding the JSON below on stdin; it already carries the merge app's actor id:
 
@@ -102,7 +104,7 @@ Done when: `gh api /repos/OWNER/REPO/rulesets -q '.[].name'` lists `cardboard` a
 
 ## 5. Create the board
 
-The user does this at https://cardboard.xode.cc/admin/boards: name, slug, this repository's URL, provider and model, preview mode (`external` unless the repository has a Dockerfile and runner previews are enabled), and the members who may open it. Members must sign up at cardboard.xode.cc with the invited email before they can sign in.
+The user does this at https://kardboard.cc/admin/boards: name, slug, this repository's URL, provider and model, preview mode (`external` unless the repository has a Dockerfile and runner previews are enabled), and the members who may open it. Members must sign up at kardboard.cc with the invited email before they can sign in.
 
 Done when: the board exists and its settings dialog shows both apps installed.
 
