@@ -3,5 +3,5 @@ npx skills@latest add Leonxlnx/taste-skill -g -a codex claude-code -y -s industr
 && npx skills@latest add github/awesome-copilot -g -a codex claude-code -y -s create-readme \
 && npx skills@latest add juliusbrussee/caveman g -a codex claude-code -y -s caveman \
 && npx skills@latest add mattpocock/skills -g -a codex claude-code -y \
-&& npx skills@latest add chriscorbell/skills -g -a codex claude-code -y -s ci-cd-pipeline-setup git-development-workflow skills
+&& npx skills@latest add chriscorbell/skills -g -a codex claude-code -y -s ci-cd-pipeline-setup git-development-workflow skills cardboard-onboard
 ```
