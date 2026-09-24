@@ -5,7 +5,7 @@ description: Prepare a GitHub repository for kardboard, the agent-native kanban 
 
 # Onboard a repository for kardboard
 
-A kardboard **Session** is a disposable container that clones this repository on a branch named `cardboard/<card id>-<slug>`, reads `AGENTS.md`, makes the change a card asks for, runs the repository's acceptance command, pushes, and opens a pull request with `gh`. kardboard itself merges on Approval through a second GitHub App that bypasses a branch ruleset. Onboarding is done when every item in the final checklist is verified, not merely written.
+A kardboard **Session** is a disposable container that clones this repository on a branch named `kardboard/<card id>-<slug>`, reads `AGENTS.md`, makes the change a card asks for, runs the repository's acceptance command, pushes, and opens a pull request with `gh`. kardboard itself merges on Approval through a second GitHub App that bypasses a branch ruleset. Onboarding is done when every item in the final checklist is verified, not merely written.
 
 Work from the repository root. Find the repository with `gh repo view --json nameWithOwner,defaultBranchRef -q '.nameWithOwner + " " + .defaultBranchRef.name'`.
 
@@ -28,7 +28,7 @@ Done when: `AGENTS.md` names one acceptance command you ran successfully in this
 - CI must run on pull requests from branches in this repository, since Session branches are same-repo branches. Check the workflow triggers include `pull_request`.
 - If the project deploys pull-request previews on its own (Cloudflare Pages, Vercel), note the preview URL pattern in `AGENTS.md` so the Session can link it on the card. Without one, the board runs in external preview mode with no preview link.
 
-Done when: a pull request from a `cardboard/*` branch would get the same checks as any other.
+Done when: a pull request from a `kardboard/*` branch would get the same checks as any other.
 
 ## 3. Install both GitHub Apps on the repository
 
@@ -41,16 +41,14 @@ Choose "Only select repositories" and pick this repository. On a client-owned re
 
 Done when: the board's settings dialog in kardboard admin shows both apps as installed (step 5 creates the board).
 
-## 4. Protect the default branch with the `cardboard` ruleset
-
-The ruleset name `cardboard` and the `cardboard/` branch prefix predate the rename to kardboard and stay as they are, so existing boards keep working.
+## 4. Protect the default branch with the `kardboard` ruleset
 
 The ruleset requires a pull request with one approval. Its bypass actors are the merge app and repository admins, so a Session's token cannot merge while the owner keeps pushing directly. Create it with one API call, feeding the JSON below on stdin; it already carries the merge app's actor id:
 
 ```bash
 gh api -X POST "/repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/rulesets" --input - <<'JSON'
 {
-  "name": "cardboard",
+  "name": "kardboard",
   "target": "branch",
   "enforcement": "active",
   "conditions": {
@@ -98,9 +96,9 @@ gh api -X POST "/repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/ru
 JSON
 ```
 
-If the repository already has a ruleset named `cardboard`, leave it. Requires admin on the repository; on a client-owned repository, hand the JSON and the command to the client.
+If the repository already has a ruleset named `kardboard`, leave it. Requires admin on the repository; on a client-owned repository, hand the JSON and the command to the client.
 
-Done when: `gh api /repos/OWNER/REPO/rulesets -q '.[].name'` lists `cardboard` and the ruleset page shows enforcement Active.
+Done when: `gh api /repos/OWNER/REPO/rulesets -q '.[].name'` lists `kardboard` and the ruleset page shows enforcement Active.
 
 ## 5. Create the board
 
@@ -117,5 +115,5 @@ Have the user create one small, concrete card on the board, for example a one-li
 - `AGENTS.md` names a verified acceptance command.
 - CI runs on pull requests from same-repo branches.
 - Both apps show as installed on the board.
-- The `cardboard` ruleset is active on the default branch.
+- The `kardboard` ruleset is active on the default branch.
 - One card has gone Inbox to Review to Done through a merged pull request.
