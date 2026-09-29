@@ -164,7 +164,13 @@ Work on this project is tracked on the kardboard board `<slug>`, through the `ka
 
 Done when: the section names this board's slug.
 
-### 4. Prove the connection
+### 4. Let the agent use the board without asking
+
+Claude Code asks before every MCP tool call until a rule allows it, which turns each card move into a prompt. Add `mcp__kardboard` to `permissions.allow` in `.claude/settings.json`, keeping whatever the file already holds; the rule covers every tool of the `kardboard` server. The file holds no secret, so commit it with the `AGENTS.md` change, and every checkout of the repository gets the rule once the user accepts Claude Code's trust prompt for the folder.
+
+Done when: `.claude/settings.json` parses as JSON and its `permissions.allow` lists `mcp__kardboard`.
+
+### 5. Prove the connection
 
 An agent loads its MCP tools when its session starts, so the session that ran the setup may lack them. Read the board from a fresh one:
 
@@ -179,4 +185,5 @@ Done when: the reply names this board.
 - The board exists with Sessions off.
 - `kardboard` is Connected in local scope for this folder.
 - `AGENTS.md` names the board's slug in a Work tracking section.
+- `.claude/settings.json` allows `mcp__kardboard`.
 - A fresh agent session read the board through `get_board`.
