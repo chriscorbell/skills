@@ -1,11 +1,11 @@
 ---
 name: kardboard-onboard
-description: Connect a coding agent to kardboard, the self-hosted kanban on the user's tailnet, and onboard a project onto it. Use when the user wants to connect their agent to kardboard, onboard or set up a repo or project for kardboard, or when an agent cannot see a project's board.
+description: Connect a coding agent to kardboard, the user's self-hosted kanban, and onboard a project onto it. Use when the user wants to connect their agent to kardboard, onboard or set up a repo or project for kardboard, or when an agent cannot see a project's board.
 ---
 
 # Onboard onto kardboard
 
-kardboard keeps every project the user works on as a board of cards, kept up to date by the user and their coding agents. It is reached only over the user's tailnet, at `https://<host>.<tailnet>.ts.net`, and Tailscale is its sign-in, so this machine must be on that tailnet. Nothing on a board starts by itself. An agent reaches every board through one access token and the `kardboard` MCP server, finds the board for the repository it is in from `git remote get-url origin`, and files its side-findings as Backlog cards. kardboard never reads or merges pull requests: the agent merges with the user's own GitHub access, so a repository installs nothing from kardboard.
+kardboard keeps every project the user works on as a board of cards, kept up to date by the user and their coding agents. It runs on the user's home server as a plain port with no sign-in, reached from their home network or tailnet and never from the public internet, at `http://minicore.saanen-monitor.ts.net:3071` for Chris, so this machine must be on one of them. Use the full tailnet name: the bare host name can resolve through another search domain first. Nothing on a board starts by itself. An agent reaches every board through one access token and the `kardboard` MCP server, finds the board for the repository it is in from `git remote get-url origin`, and files its side-findings as Backlog cards. kardboard never reads or merges pull requests: the agent merges with the user's own GitHub access, so a repository installs nothing from kardboard.
 
 Onboarding has two halves: connecting the agent, once per machine, and onboarding the project, once per repository. Check each step's completion criterion first and do only the steps that fail.
 
@@ -49,7 +49,7 @@ Done when: `AGENTS.md` carries the Work tracking section.
 
 - No `kardboard` tools: the session started before the server was added. Start a new one.
 - `401 unauthorized`: the token was revoked. Make a new one, as in step 1.
-- A connection error: this machine is not on the tailnet, or the MCP URL still names an old address. `tailscale status` shows the first; `claude mcp get kardboard | grep URL` the second.
+- A connection error: this machine cannot reach the server, or the MCP URL still names an old address, such as `https://minicore.saanen-monitor.ts.net/mcp` from before kardboard moved to its own port. `curl <address>/healthz` checks the first, and `claude mcp get kardboard | grep URL` the second. For an old address, remove the server with `claude mcp remove kardboard -s user` and install it again as in step 1.
 - `no board matches`: the board has no repository, or a different one. Set it in kardboard's **Settings → Boards**, or name the board by its slug.
 
 ## Final checklist
