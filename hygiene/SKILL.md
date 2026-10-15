@@ -1,6 +1,6 @@
 ---
 name: hygiene
-description: Hygiene pass on the current repository: inventory stale worktrees, branches, stashes, temp files, outputs, leftover processes and outdated docs, then clean up only what the user approves. Use when the user asks for a hygiene pass or a cleanup of leftovers.
+description: Hygiene pass on the current repository. Inventories stale worktrees, branches, stashes, temp files, outputs, leftover processes and outdated docs, then cleans up only what the user approves. Use when the user asks for a hygiene pass or a cleanup of leftovers.
 ---
 
 # Hygiene pass
