@@ -4,5 +4,5 @@ npx skills@latest add Leonxlnx/taste-skill -g -a codex claude-code -y -s industr
 && npx skills@latest add juliusbrussee/caveman g -a codex claude-code -y -s caveman \
 && npx skills@latest add mattpocock/skills -g -a codex claude-code -y \
 && npx skills@latest add cursor/plugins -g -a codex claude-code -y -s unslop \
-&& npx skills@latest add chriscorbell/skills -g -a codex claude-code -y -s ci-cd-pipeline-setup git-development-workflow setup-workspace-memory kardboard-onboard hygiene
+&& npx skills@latest add chriscorbell/skills -g -a codex claude-code -y -s ci-cd-pipeline-setup git-development-workflow setup-workspace-memory kardboard-onboard hygiene council
 ```
