@@ -13,8 +13,8 @@ and explore new ideas, skip fixes to code being replaced.
 Bring in two delegates to help with the user's request, usually for review
 or feedback:
 
-- Claude Fable 5.2, at xhigh reasoning effort
-- GPT-6 Astra, at xhigh reasoning effort
+- Claude Opus 5.5, at high reasoning effort
+- GPT-6.1 Sol, at high reasoning effort
 
 If the user's instructions name other council members, use those.
 
@@ -22,7 +22,7 @@ In T3 Code, use `orchestrator_capabilities` to resolve the models and their
 reasoning effort option, which some providers call `variant`, then
 `delegate_task` to start one delegate per model in parallel. Elsewhere, use
 the harness's subagent tools. If a member is unavailable, or can't run at
-xhigh, report it instead of substituting.
+high, report it instead of substituting.
 
 Give each delegate the request and relevant context. For review or feedback,
 keep their work read-only. Collect their responses and summarize the useful
