@@ -13,8 +13,8 @@ and explore new ideas, skip fixes to code being replaced.
 Bring in two delegates to help with the user's request, usually for review
 or feedback:
 
-- Claude Opus 5.5, at xhigh reasoning effort
-- GPT-6.1 Sol, at xhigh reasoning effort
+- Claude Fable 5.2, at xhigh reasoning effort
+- GPT-6 Astra, at xhigh reasoning effort
 
 If the user's instructions name other council members, use those.
 
@@ -42,8 +42,8 @@ Rounds: 2
 
 | Delegate | Round 1 | Round 2 |
 | --- | --- | --- |
-| Claude Opus 5.5 | 7/10 | 9/10 |
-| GPT-6.1 Sol | 8/10 | 10/10 |
+| <model-1_name> | 7/10 | 9/10 |
+| <model-2_name> | 8/10 | 10/10 |
 ```
 
 If a delegate gives no score, write `no score`. Do not invent one.
